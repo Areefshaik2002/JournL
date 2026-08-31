@@ -60,7 +60,7 @@ export const Timeline: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center text-slate-400">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500 border-t-transparent"></div>
       </div>
     )
   }
@@ -75,7 +75,7 @@ export const Timeline: React.FC = () => {
         </div>
         <Link
           to="/journal/new"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 transition-colors"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:from-amber-600 hover:to-rose-600 transition-colors"
         >
           <PlusCircle className="h-4 w-4" /> New Entry
         </Link>
@@ -91,7 +91,7 @@ export const Timeline: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entries by title or content..."
-            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:border-rose-500 focus:bg-white focus:outline-none"
           />
         </div>
 
@@ -101,7 +101,7 @@ export const Timeline: React.FC = () => {
           <select
             value={selectedMood}
             onChange={(e) => setSelectedMood(e.target.value)}
-            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none appearance-none"
+            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 focus:border-rose-500 focus:bg-white focus:outline-none appearance-none"
           >
             <option value="all">All Moods</option>
             <option value="happy">Happy 😊</option>
@@ -120,7 +120,7 @@ export const Timeline: React.FC = () => {
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none appearance-none"
+              className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-rose-500 focus:bg-white focus:outline-none appearance-none"
             >
               <option value="all">All Tags</option>
               {allTags.map((tag) => (
@@ -150,7 +150,7 @@ export const Timeline: React.FC = () => {
             return (
               <div
                 key={entry.journalId}
-                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-indigo-300 hover:shadow-md"
+                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-orange-300 hover:shadow-md"
               >
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                   <div className="flex items-center gap-3">
@@ -169,14 +169,14 @@ export const Timeline: React.FC = () => {
 
                   <Link
                     to={`/journal/${entry.journalId}`}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-500"
+                    className="text-xs font-semibold text-rose-500 hover:text-rose-600"
                   >
                     Read full entry →
                   </Link>
                 </div>
 
                 <Link to={`/journal/${entry.journalId}`}>
-                  <h2 className="mt-3 text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  <h2 className="mt-3 text-xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
                     {entry.title}
                   </h2>
                   <p className="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">

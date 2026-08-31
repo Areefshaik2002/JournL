@@ -47,7 +47,7 @@ export const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center text-slate-400">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500 border-t-transparent"></div>
       </div>
     )
   }
@@ -55,13 +55,13 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 space-y-8">
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-100 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 p-8 shadow-xl text-white">
+      <div className="relative overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-8 shadow-xl text-white">
         <div className="relative z-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
               Welcome back, {user?.name}! 👋
             </h1>
-            <p className="mt-2 text-base text-indigo-100">
+            <p className="mt-2 text-base text-rose-50 font-medium">
               {data?.hasWrittenToday
                 ? "Awesome! You've already recorded your journal for today."
                 : "You haven't written today yet. Capture your thoughts in 5 minutes!"}
@@ -69,9 +69,9 @@ export const Dashboard: React.FC = () => {
           </div>
           <Link
             to="/journal/new"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-indigo-600 shadow-lg hover:bg-slate-50 transition-all transform hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-orange-600 shadow-lg hover:bg-orange-50 transition-all transform hover:-translate-y-0.5"
           >
-            <PlusCircle className="h-5 w-5" />
+            <PlusCircle className="h-5 w-5 text-orange-500" />
             Write Today's Entry
           </Link>
         </div>
@@ -85,8 +85,8 @@ export const Dashboard: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Writing Streak
             </span>
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-              <Flame className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+              <Flame className="h-6 w-6 text-orange-500" />
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
@@ -101,8 +101,8 @@ export const Dashboard: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Total Journals
             </span>
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-              <BookCheck className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+              <BookCheck className="h-6 w-6 text-rose-500" />
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
@@ -141,7 +141,7 @@ export const Dashboard: React.FC = () => {
           <h2 className="text-xl font-bold text-slate-900">Recent Entries</h2>
           <Link
             to="/timeline"
-            className="flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            className="flex items-center gap-1 text-sm font-semibold text-rose-500 hover:text-rose-600"
           >
             View all <ArrowRight className="h-4 w-4" />
           </Link>
@@ -155,7 +155,7 @@ export const Dashboard: React.FC = () => {
                 <Link
                   key={entry.journalId}
                   to={`/journal/${entry.journalId}`}
-                  className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all"
+                  className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-orange-300 hover:shadow-md transition-all"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2">
@@ -169,7 +169,7 @@ export const Dashboard: React.FC = () => {
                         })}
                       </span>
                     </div>
-                    <h3 className="mt-3 text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                    <h3 className="mt-3 text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
                       {entry.title}
                     </h3>
                     <p className="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">
@@ -199,7 +199,7 @@ export const Dashboard: React.FC = () => {
             <p className="mt-3 text-sm text-slate-500">No journal entries written yet.</p>
             <Link
               to="/journal/new"
-              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:underline"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-rose-500 hover:underline"
             >
               Write your first entry <ArrowRight className="h-4 w-4" />
             </Link>

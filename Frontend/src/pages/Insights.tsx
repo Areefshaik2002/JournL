@@ -24,7 +24,7 @@ export const Insights: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center text-slate-400">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-orange-500 border-t-transparent"></div>
       </div>
     )
   }
@@ -42,8 +42,8 @@ export const Insights: React.FC = () => {
         {/* Mood Distribution */}
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-              <Smile className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+              <Smile className="h-6 w-6 text-orange-500" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">Mood Distribution</h2>
@@ -63,7 +63,7 @@ export const Insights: React.FC = () => {
                     </div>
                     <div className="h-3 w-full overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
@@ -81,8 +81,8 @@ export const Insights: React.FC = () => {
         {/* Most Used Tags */}
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-              <Tag className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+              <Tag className="h-6 w-6 text-rose-500" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">Most Used Tags</h2>
@@ -97,10 +97,10 @@ export const Insights: React.FC = () => {
                 .map(([tag, count]) => (
                   <div
                     key={tag}
-                    className="flex items-center gap-2 rounded-xl border border-indigo-100 bg-indigo-50 px-3.5 py-2 text-sm font-semibold text-indigo-700"
+                    className="flex items-center gap-2 rounded-xl border border-orange-100 bg-orange-50 px-3.5 py-2 text-sm font-semibold text-orange-700"
                   >
                     <span>#{tag}</span>
-                    <span className="rounded-md bg-indigo-200/60 px-2 py-0.5 text-xs text-indigo-800">
+                    <span className="rounded-md bg-orange-200/60 px-2 py-0.5 text-xs text-orange-800">
                       {count}
                     </span>
                   </div>
@@ -117,15 +117,15 @@ export const Insights: React.FC = () => {
       {/* Summary Banner */}
       <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
-            <Flame className="h-7 w-7" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-orange-600">
+            <Flame className="h-7 w-7 text-orange-500" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-slate-900">Current Streak: {data?.streak || 0} Days</h3>
             <p className="text-sm text-slate-500">Keep writing daily to maintain your reflective habit!</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-2xl font-extrabold text-indigo-600">
+        <div className="flex items-center gap-2 text-2xl font-extrabold text-rose-500">
           <BarChart3 className="h-6 w-6" /> {data?.totalEntries || 0} Total Entries
         </div>
       </div>
