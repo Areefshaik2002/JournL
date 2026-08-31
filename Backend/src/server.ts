@@ -1,5 +1,7 @@
 import app from './app.js'
 
-app.listen(3001, () => {
-  console.log('Server running on port 5000')
+const PORT = process.env.PORT || 3001
+
+app.listen(PORT, () => {
+  console.log(`JournL Backend server running on port ${PORT}`)
 })

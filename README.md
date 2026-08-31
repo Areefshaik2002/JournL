@@ -1,315 +1,138 @@
-# 📓 Life Journal
+# 📓 JournL — Life Journal Application
 
 > *Capture your day in less than five minutes.*
 
-Life Journal is a modern full-stack journaling web application built to help users record their daily thoughts, moods, and experiences in a simple and organized way. The application focuses on a clean user experience while demonstrating real-world full-stack development using React, Node.js, Express, and DynamoDB.
-
-This project is being built with a production-oriented approach, where every feature is designed, implemented, reviewed, and tested before moving to the next.
+**JournL** is a modern full-stack journaling web application built to record daily thoughts, moods, and experiences. Built with React 19, TypeScript, Tailwind CSS v4, Express v5, and Amazon DynamoDB.
 
 ---
 
-# 🚀 Features
+## 🚀 Features Implemented
 
-## Authentication
-
-* User Registration
-* User Login
-* JWT Authentication
-* HttpOnly Cookie Authentication
-* Protected Routes
-* Persistent Login
-* Logout
-
-> Future Enhancement
-
-* Google OAuth
-* GitHub OAuth
+- **🔐 Authentication**: Registration, Login, Logout, JWT HttpOnly cookie session management, Protected Routes, and Persistent Login.
+- **📊 Dashboard**: Dynamic welcome screen, active writing streak calculator, total entries metric, today's completion status, quick journal creation shortcut, and recent entries feed.
+- **📝 Journal Management (CRUD)**: Create, View, Edit, and Delete journal entries. Includes title, mood selector (Happy, Calm, Neutral, Sad, Anxious, Energetic), custom tag pills, content, and automatic timestamping.
+- **⏳ Timeline**: Browse complete journal history with live search by title/content, mood filtering, tag filtering, and ascending/descending chronological sorting.
+- **📈 Insights & Analytics**: Visual mood distribution breakdown percentage bars, most used tag cloud with usage frequencies, writing streak stats, and overall activity counters.
+- **🗄️ AWS DynamoDB & Fallback**: Native DynamoDB client using `@aws-sdk/lib-dynamodb` document client with built-in automatic mock store fallback if AWS credentials are not set.
 
 ---
 
-## Dashboard
+## 🛠 Tech Stack
 
-* Welcome Message
-* Writing Streak
-* Total Journal Entries
-* Today's Journal Status
-* Recent Journal Entries
+### Frontend
+- **Framework**: React 19 + Vite
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Icons**: Lucide React
+- **Routing**: React Router v7
+- **HTTP Client**: Axios (configured with `withCredentials: true`)
 
----
-
-## Journal
-
-* Create Journal Entry
-* View Journal Entry
-* Edit Journal Entry
-* Delete Journal Entry
-
-Each journal contains:
-
-* Title
-* Mood
-* Tags
-* Content
-* Created Date
-* Updated Date
+### Backend
+- **Runtime**: Node.js + Express v5
+- **Language**: TypeScript (`tsx` runner, ES Modules)
+- **Database**: AWS SDK v3 (`@aws-sdk/client-dynamodb`, `@aws-sdk/lib-dynamodb`)
+- **Security**: JWT (`jsonwebtoken`), Password Hashing (`bcrypt`), `cookie-parser`, `cors`
 
 ---
 
-## Timeline
+## 📝 Implementation Step Logs & Notes
 
-* View All Journal Entries
-* Search Entries
-* Filter by Mood
-* Filter by Tags
-* Sort Entries
+### Step 1: Base Setup & Connection
+- Configured Express server running on port `3001` (bypassing macOS AirPlay receiver port 5000 conflict).
+- Configured Vite React frontend running on port `5174` with Tailwind CSS v4 styling.
+- Enabled CORS with credentials for cookie-based auth between frontend and backend.
 
----
+### Step 2: Database Setup (AWS DynamoDB + Fallback Store)
+- Installed `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb` in the backend.
+- Created `src/config/db.ts` to initialize `DynamoDBDocumentClient`.
+- Implemented automatic environment check: if `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are provided in `Backend/.env`, the system connects directly to AWS DynamoDB tables (`JournL-Users`, `JournL-Journals`). If blank, it gracefully defaults to an in-memory mock database to allow local execution without setup friction.
 
-## Insights
+### Step 3: Authentication & Security
+- Created `UserService` and `AuthController` for user registration and authentication.
+- Passwords are securely hashed using `bcrypt` (10 rounds).
+- Issued 7-day JWT tokens transmitted via `HttpOnly` cookies (`token`) for security against XSS.
+- Added `authenticateJWT` middleware to protect `/api/journals` and `/api/dashboard` API routes.
+- Built `AuthContext` and `ProtectedRoute` on the frontend for smooth persistent auth state.
 
-* Writing Streak
-* Mood Distribution
-* Monthly Activity
-* Most Used Tags
-* Total Journals
+### Step 4: Journal CRUD & Timeline Features
+- Implemented `JournalService` and `JournalController` supporting full CRUD operations (`GET`, `POST`, `PUT`, `DELETE` on `/api/journals`).
+- Built `JournalEditor` page supporting entry creation, edit modes, custom tag additions/deletions, and mood tags.
+- Built `JournalDetail` page for full reading and entry management.
+- Built `Timeline` page supporting real-time search queries, mood filter dropdowns, tag filter dropdowns, and date sorting (`Newest` / `Oldest`).
 
----
-
-# 🛠 Tech Stack
-
-## Frontend
-
-* React
-* Vite
-* React Router
-* Axios
-* Tailwind CSS
-
-## Backend
-
-* Node.js
-* Express.js
-
-## Database
-
-* Amazon DynamoDB
-
-## Authentication
-
-* JWT
-* bcrypt
-* HttpOnly Cookies
-
-## Deployment
-
-* Frontend: Vercel
-* Backend: AWS / Render
-* Database: Amazon DynamoDB
+### Step 5: Dashboard & Insights Analytics
+- Created `DashboardController` calculating active daily streaks by checking continuous consecutive dates, total count of journals written, and today's status.
+- Built `Dashboard` page with user greeting, streak cards, and recent entries.
+- Built `Insights` page displaying interactive mood percentage progress bars and tag usage chips.
 
 ---
 
-# 📂 Project Structure
+## 🏃 Quick Start Guide
 
-```text
-life-journal/
+### Prerequisites
+- Node.js (v18+)
+- npm
 
-├── frontend/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── hooks/
-│   │   ├── layouts/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── package.json
-│
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   ├── app.js
-│   │   └── server.js
-│   └── package.json
-│
-├── README.md
-└── .gitignore
+### 1. Backend Setup
+```bash
+cd Backend
+npm install
 ```
 
----
+Create a `.env` file inside `Backend/`:
+```env
+PORT=3001
+NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key_here
+CORS_ORIGIN=http://localhost:5174
 
-# 🗄 Database Design
+# AWS DynamoDB (Optional - leave blank to use automatic local mock database)
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+USERS_TABLE_NAME=JournL-Users
+JOURNALS_TABLE_NAME=JournL-Journals
+```
 
-## Users
+Start backend development server:
+```bash
+npm run dev
+```
+*(Backend will run on http://localhost:3001)*
 
-| Field        | Type   |
-| ------------ | ------ |
-| userId       | UUID   |
-| name         | String |
-| email        | String |
-| passwordHash | String |
-| createdAt    | Date   |
-
----
-
-## Journals
-
-| Field     | Type   |
-| --------- | ------ |
-| journalId | UUID   |
-| userId    | UUID   |
-| title     | String |
-| content   | String |
-| mood      | String |
-| tags      | Array  |
-| createdAt | Date   |
-| updatedAt | Date   |
-
----
-
-# 🌐 API Overview
-
-## Authentication
-
-| Method | Endpoint             | Description      |
-| ------ | -------------------- | ---------------- |
-| POST   | `/api/auth/register` | Register user    |
-| POST   | `/api/auth/login`    | Login            |
-| POST   | `/api/auth/logout`   | Logout           |
-| GET    | `/api/auth/me`       | Get current user |
+### 2. Frontend Setup
+In a new terminal:
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+*(Frontend will run on http://localhost:5174)*
 
 ---
 
-## Journal
+## 🌐 API Reference
 
-| Method | Endpoint            | Description      |
-| ------ | ------------------- | ---------------- |
-| GET    | `/api/journals`     | Get all journals |
-| GET    | `/api/journals/:id` | Get journal      |
-| POST   | `/api/journals`     | Create journal   |
-| PUT    | `/api/journals/:id` | Update journal   |
-| DELETE | `/api/journals/:id` | Delete journal   |
+### Auth
+- `POST /api/auth/register` — Register a new account
+- `POST /api/auth/login` — Sign in and set HttpOnly JWT cookie
+- `POST /api/auth/logout` — Clear auth cookie
+- `GET /api/auth/me` — Get current logged-in user
 
----
+### Journals
+- `GET /api/journals` — Fetch user's journal entries
+- `GET /api/journals/:id` — Fetch single entry by ID
+- `POST /api/journals` — Create a new entry
+- `PUT /api/journals/:id` — Update an existing entry
+- `DELETE /api/journals/:id` — Delete an entry
 
-## Dashboard
-
-| Method | Endpoint         | Description       |
-| ------ | ---------------- | ----------------- |
-| GET    | `/api/dashboard` | Dashboard summary |
-
----
-
-# ✅ Development Checklist
-
-## Planning
-
-* [ ] Finalize requirements
-* [ ] Finalize UI design
-* [ ] Design database
-* [ ] Design APIs
-
-## Project Setup
-
-* [ ] Initialize React project
-* [ ] Initialize Express project
-* [ ] Configure Tailwind CSS
-* [ ] Configure environment variables
-* [ ] Connect frontend and backend
-
-## Database
-
-* [ ] Configure DynamoDB
-* [ ] Create Users table
-* [ ] Create Journals table
-
-## Authentication
-
-* [ ] Register
-* [ ] Login
-* [ ] JWT Authentication
-* [ ] Protected Routes
-* [ ] Logout
-
-## Dashboard
-
-* [ ] Dashboard UI
-* [ ] Dashboard API
-
-## Journal
-
-* [ ] Create Entry
-* [ ] View Entry
-* [ ] Edit Entry
-* [ ] Delete Entry
-
-## Timeline
-
-* [ ] Search
-* [ ] Filters
-* [ ] Sorting
-
-## Insights
-
-* [ ] Mood Analytics
-* [ ] Writing Streak
-* [ ] Monthly Statistics
-
-## Deployment
-
-* [ ] Deploy Backend
-* [ ] Deploy Frontend
-* [ ] Configure Production Environment
-
-## Future Enhancements
-
-* [ ] Google OAuth
-* [ ] GitHub OAuth
-* [ ] Dark Mode
-* [ ] Rich Text Editor
-* [ ] Image Attachments
-* [ ] Export Journal as PDF
-* [ ] Email Reminders
+### Dashboard
+- `GET /api/dashboard` — Get streak, today's status, recent entries, and mood/tag analytics summary
 
 ---
 
-# 🧑‍💻 Development Workflow
+## 🎯 Verification & Build
 
-Every feature will follow the same implementation process:
-
-1. Define the requirement
-2. Design the UI
-3. Design the API
-4. Design the database changes
-5. Implement the backend
-6. Implement the frontend
-7. Integrate both
-8. Test the feature
-9. Review and refactor
-10. Commit with a meaningful Git message
-
----
-
-# 🎯 Project Goal
-
-The primary goal of Life Journal is to build a real-world full-stack application while learning:
-
-* React
-* Node.js
-* Express
-* DynamoDB
-* REST API Design
-* Authentication & Authorization
-* Modern Frontend Architecture
-* Backend Architecture
-* Deployment
-* Software Engineering Best Practices
-
-By the end of the project, the application should be production-ready, responsive, secure, and easily extensible for future features such as OAuth authentication and additional integrations.
+Both Frontend and Backend TypeScript codebases build cleanly without errors:
+- **Backend build**: `npm run build` (tsc ES Module output)
+- **Frontend build**: `npm run build` (tsc -b && vite build)
