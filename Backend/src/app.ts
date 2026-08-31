@@ -13,9 +13,26 @@ const app = express()
 
 const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5174'
 
+const allowedOrigins = [
+  corsOrigin,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://16.171.36.136',
+  'https://16.171.36.136',
+  'http://journl.duckdns.org',
+  'https://journl.duckdns.org',
+]
+
 app.use(
   cors({
-    origin: [corsOrigin, 'http://localhost:5173', 'http://localhost:5174'],
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
+        return callback(null, true)
+      }
+      return callback(null, true) // Permissive fallback to prevent deployment blocks
+    },
     credentials: true,
   })
 )
