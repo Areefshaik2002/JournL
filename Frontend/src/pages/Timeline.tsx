@@ -5,12 +5,12 @@ import type { JournalEntry } from '../services/api'
 import { Search, Filter, ArrowUpDown, Tag, PlusCircle } from 'lucide-react'
 
 const MOOD_ICONS: Record<string, { label: string; color: string }> = {
-  happy: { label: 'Happy 😊', color: 'text-amber-400 bg-amber-400/10 border-amber-400/20' },
-  calm: { label: 'Calm 🌿', color: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' },
-  neutral: { label: 'Neutral 😐', color: 'text-slate-400 bg-slate-400/10 border-slate-400/20' },
-  sad: { label: 'Sad 🌧️', color: 'text-blue-400 bg-blue-400/10 border-blue-400/20' },
-  anxious: { label: 'Anxious ⚡', color: 'text-rose-400 bg-rose-400/10 border-rose-400/20' },
-  energetic: { label: 'Energetic 🚀', color: 'text-purple-400 bg-purple-400/10 border-purple-400/20' },
+  happy: { label: 'Happy 😊', color: 'text-amber-700 bg-amber-50 border-amber-200' },
+  calm: { label: 'Calm 🌿', color: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
+  neutral: { label: 'Neutral 😐', color: 'text-slate-700 bg-slate-100 border-slate-200' },
+  sad: { label: 'Sad 🌧️', color: 'text-blue-700 bg-blue-50 border-blue-200' },
+  anxious: { label: 'Anxious ⚡', color: 'text-rose-700 bg-rose-50 border-rose-200' },
+  energetic: { label: 'Energetic 🚀', color: 'text-purple-700 bg-purple-50 border-purple-200' },
 }
 
 export const Timeline: React.FC = () => {
@@ -60,7 +60,7 @@ export const Timeline: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center text-slate-400">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
       </div>
     )
   }
@@ -70,8 +70,8 @@ export const Timeline: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">Journal Timeline</h1>
-          <p className="mt-1 text-sm text-slate-400">Search, filter, and review all your past entries</p>
+          <h1 className="text-3xl font-extrabold text-slate-900">Journal Timeline</h1>
+          <p className="mt-1 text-sm text-slate-500">Search, filter, and review all your past entries</p>
         </div>
         <Link
           to="/journal/new"
@@ -82,26 +82,26 @@ export const Timeline: React.FC = () => {
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 backdrop-blur-sm md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-4">
         {/* Search */}
         <div className="relative md:col-span-2">
-          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entries by title or content..."
-            className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none"
           />
         </div>
 
         {/* Mood Filter */}
         <div className="relative">
-          <Filter className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+          <Filter className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
           <select
             value={selectedMood}
             onChange={(e) => setSelectedMood(e.target.value)}
-            className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-10 pr-4 text-sm text-white focus:border-indigo-500 focus:outline-none appearance-none"
+            className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-10 pr-4 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none appearance-none"
           >
             <option value="all">All Moods</option>
             <option value="happy">Happy 😊</option>
@@ -116,11 +116,11 @@ export const Timeline: React.FC = () => {
         {/* Sort & Tag Filter */}
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Tag className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
+            <Tag className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
-              className="w-full rounded-xl border border-slate-700 bg-slate-800/60 py-2 pl-9 pr-3 text-sm text-white focus:border-indigo-500 focus:outline-none appearance-none"
+              className="w-full rounded-xl border border-slate-300 bg-slate-50/50 py-2 pl-9 pr-3 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none appearance-none"
             >
               <option value="all">All Tags</option>
               {allTags.map((tag) => (
@@ -134,7 +134,7 @@ export const Timeline: React.FC = () => {
           <button
             onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
             title="Toggle sort order"
-            className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/60 px-3 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-slate-50/50 px-3 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <ArrowUpDown className="h-4 w-4" />
             <span>{sortOrder === 'desc' ? 'Newest' : 'Oldest'}</span>
@@ -150,14 +150,14 @@ export const Timeline: React.FC = () => {
             return (
               <div
                 key={entry.journalId}
-                className="group rounded-2xl border border-slate-800 bg-slate-900/40 p-6 transition-all hover:border-slate-700 hover:bg-slate-800/50"
+                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-indigo-300 hover:shadow-md"
               >
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                   <div className="flex items-center gap-3">
                     <span className={`inline-flex items-center gap-1 rounded-xl border px-3 py-1 text-xs font-semibold ${moodMeta.color}`}>
                       {moodMeta.label}
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-slate-500">
                       {new Date(entry.createdAt).toLocaleDateString(undefined, {
                         weekday: 'short',
                         year: 'numeric',
@@ -169,27 +169,27 @@ export const Timeline: React.FC = () => {
 
                   <Link
                     to={`/journal/${entry.journalId}`}
-                    className="text-xs font-semibold text-indigo-400 hover:text-indigo-300"
+                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Read full entry →
                   </Link>
                 </div>
 
                 <Link to={`/journal/${entry.journalId}`}>
-                  <h2 className="mt-3 text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">
+                  <h2 className="mt-3 text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                     {entry.title}
                   </h2>
-                  <p className="mt-2 text-sm text-slate-300 line-clamp-3 leading-relaxed">
+                  <p className="mt-2 text-sm text-slate-600 line-clamp-3 leading-relaxed">
                     {entry.content}
                   </p>
                 </Link>
 
                 {entry.tags && entry.tags.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-slate-800/60">
+                  <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-slate-100">
                     {entry.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-400"
+                        className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"
                       >
                         #{tag}
                       </span>
@@ -201,7 +201,7 @@ export const Timeline: React.FC = () => {
           })}
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-12 text-center text-slate-400">
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-slate-500">
           No entries matched your search criteria.
         </div>
       )}
