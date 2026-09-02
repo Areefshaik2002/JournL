@@ -72,7 +72,7 @@ export class JournalService {
       entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     }
 
-    await redisClient.setex(cacheKey, 120, JSON.stringify(entries))
+    await redisClient.setex(cacheKey, 90, JSON.stringify(entries))
 
     return entries
   }
@@ -113,7 +113,7 @@ export class JournalService {
     }
 
     if (entry) {
-      await redisClient.setex(cacheKey, 120, JSON.stringify(entry))
+      await redisClient.setex(cacheKey, 90, JSON.stringify(entry))
     }
 
     return entry
