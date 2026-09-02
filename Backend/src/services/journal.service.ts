@@ -1,3 +1,4 @@
+import { redisClient } from '../config/redis.js'
 import type { JournalEntry } from '../models/types.js'
 import {
   PutCommand,
@@ -25,10 +26,20 @@ export class JournalService {
     } else {
       mockJournalsStore.set(entry.journalId, entry)
     }
+    await redisClient.del(`journals:${entry.userId}`)
     return entry
   }
 
   static async getUserEntries(userId: string): Promise<JournalEntry[]> {
+    const cacheKey = `journals:${userId}`
+
+    const cached = await redisClient.get(cacheKey)
+    if (cached) {
+      return JSON.parse(cached) as JournalEntry[]
+    }
+
+    let entries: JournalEntry[] = []
+
     if (hasAwsCredentials && docClient) {
       try {
         const response = await docClient.send(
@@ -40,7 +51,7 @@ export class JournalService {
             },
           })
         )
-        return (response.Items as JournalEntry[]) || []
+        entries = (response.Items as JournalEntry[]) || []
       } catch {
         const response = await docClient.send(
           new ScanCommand({
@@ -51,19 +62,18 @@ export class JournalService {
             },
           })
         )
-        return (response.Items as JournalEntry[]) || []
+        entries = (response.Items as JournalEntry[]) || []
       }
     } else {
-      const userEntries: JournalEntry[] = []
       for (const entry of mockJournalsStore.values()) {
-        if (entry.userId === userId) {
-          userEntries.push(entry)
-        }
+        if (entry.userId === userId) entries.push(entry)
       }
-      return userEntries.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
+      entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     }
+
+    await redisClient.setex(cacheKey, 120, JSON.stringify(entries))
+
+    return entries
   }
 
   static async getEntryById(userId: string, journalId: string): Promise<JournalEntry | null> {
@@ -119,6 +129,8 @@ export class JournalService {
       mockJournalsStore.set(journalId, updatedEntry)
     }
 
+    await redisClient.del(`journals:${userId}`)
+
     return updatedEntry
   }
 
@@ -145,6 +157,8 @@ export class JournalService {
     } else {
       mockJournalsStore.delete(journalId)
     }
+
+    await redisClient.del(`journals:${userId}`)
 
     return true
   }
