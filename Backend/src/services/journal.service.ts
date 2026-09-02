@@ -27,6 +27,7 @@ export class JournalService {
       mockJournalsStore.set(entry.journalId, entry)
     }
     await redisClient.del(`journals:${entry.userId}`)
+    await redisClient.del(`dashboard:${entry.userId}`)
     return entry
   }
 
@@ -77,6 +78,15 @@ export class JournalService {
   }
 
   static async getEntryById(userId: string, journalId: string): Promise<JournalEntry | null> {
+    const cacheKey = `journal:${userId}:${journalId}`
+
+    const cached = await redisClient.get(cacheKey)
+    if (cached) {
+      return JSON.parse(cached) as JournalEntry
+    }
+
+    let entry: JournalEntry | null = null
+
     if (hasAwsCredentials && docClient) {
       try {
         const response = await docClient.send(
@@ -85,7 +95,7 @@ export class JournalService {
             Key: { userId, journalId },
           })
         )
-        return (response.Item as JournalEntry) || null
+        entry = (response.Item as JournalEntry) || null
       } catch {
         const response = await docClient.send(
           new GetCommand({
@@ -93,15 +103,20 @@ export class JournalService {
             Key: { journalId },
           })
         )
-        return (response.Item as JournalEntry) || null
+        entry = (response.Item as JournalEntry) || null
       }
     } else {
-      const entry = mockJournalsStore.get(journalId)
-      if (entry && entry.userId === userId) {
-        return entry
+      const found = mockJournalsStore.get(journalId)
+      if (found && found.userId === userId) {
+        entry = found
       }
-      return null
     }
+
+    if (entry) {
+      await redisClient.setex(cacheKey, 120, JSON.stringify(entry))
+    }
+
+    return entry
   }
 
   static async updateEntry(
@@ -130,6 +145,8 @@ export class JournalService {
     }
 
     await redisClient.del(`journals:${userId}`)
+    await redisClient.del(`dashboard:${userId}`)
+    await redisClient.del(`journal:${userId}:${journalId}`)
 
     return updatedEntry
   }
@@ -159,6 +176,8 @@ export class JournalService {
     }
 
     await redisClient.del(`journals:${userId}`)
+    await redisClient.del(`dashboard:${userId}`)
+    await redisClient.del(`journal:${userId}:${journalId}`)
 
     return true
   }

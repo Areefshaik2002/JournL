@@ -1,11 +1,19 @@
 import type { Response } from 'express'
 import type { AuthRequest } from '../middleware/auth.js'
 import { JournalService } from '../services/journal.service.js'
+import { redisClient } from '../config/redis.js'
 
 export class DashboardController {
   static async getDashboard(req: AuthRequest, res: Response) {
     try {
       const userId = req.user!.userId
+      const cacheKey = `dashboard:${userId}`
+
+      const cached = await redisClient.get(cacheKey)
+      if (cached) {
+        return res.json(JSON.parse(cached))
+      }
+
       const entries = await JournalService.getUserEntries(userId)
 
       const totalEntries = entries.length
@@ -77,14 +85,18 @@ export class DashboardController {
         }
       })
 
-      return res.json({
+      const dashboardData = {
         totalEntries,
         hasWrittenToday,
         streak,
         recentEntries,
         moodCounts,
         tagCounts,
-      })
+      }
+
+      await redisClient.setex(cacheKey, 60, JSON.stringify(dashboardData))
+
+      return res.json(dashboardData)
     } catch (error) {
       console.error('Error fetching dashboard summary:', error)
       return res.status(500).json({ message: 'Error fetching dashboard data' })
